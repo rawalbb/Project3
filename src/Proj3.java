@@ -12,26 +12,29 @@ public class Proj3
         ArrayList<Stats> train2 = new ArrayList<>();
         ArrayList<Stats> train3 = new ArrayList<>();
         ArrayList<Stats> test = new ArrayList<>();
-        List<Stats> train_1 = readData(train1,"/Users/Bansri/Desktop/CSAI/Project3/train_data_1.txt");
-        List<Stats> train_2 = readData(train2,"/Users/Bansri/Desktop/CSAI/Project3/train_data_2.txt");
-        List<Stats> train_3 = readData(train3,"/Users/Bansri/Desktop/CSAI/Project3/train_data_3.txt");
-        List<Stats> train_4 = readData(test,"/Users/Bansri/Desktop/CSAI/Project3/test_data_4.txt");
+
+        train1 = readData("train_data_1.txt");
+        train2 = readData("train_data_2.txt");
+        train3 = readData("train_data_3.txt");
+        test = readData("test_data_4.txt");
     }
 
-    private static List<Stats> readData(ArrayList<Stats> list, String filepath) throws IOException {
-        File file1 = new File(filepath);
+    private static ArrayList<Stats> readData(String fileName) throws IOException {
+        ArrayList<Stats> allDataPoints = new ArrayList<>();
+        File file1 = new File(fileName);
         Scanner scanFile = new Scanner(file1);
 
         while (scanFile.hasNextLine()) {
             String dataPoint = scanFile.nextLine();
             String[] data = dataPoint.split(", ");
-            list.add(new Stats(Double.parseDouble(data[0]), Double.parseDouble(data[1])));
+            allDataPoints.add(new Stats(Double.parseDouble(data[0]), Double.parseDouble(data[1])));
         }
-        return list;
+        scanFile.close();
 
+        return allDataPoints;
     }
-}
 
+}
 
 class Stats{
 
