@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Proj3
@@ -17,10 +18,12 @@ public class Proj3
         train2 = readData("train_data_2.txt");
         train3 = readData("train_data_3.txt");
         test = readData("test_data_4.txt");
-        double[] weights = new double[3];
+        double[] weights = new double[4];
         weights[0] = 1;
         weights[1] = 2;
         weights[2] = 3;
+        weights[3] = 4;
+
         double training_const = 0.005;
         int k = 1;
 
@@ -47,7 +50,15 @@ public class Proj3
         quadraticTesting(test, quadraticWeights);
 
         System.out.println("cubic architecture------------------");
-
+        double[] cubicWeights = weights;
+        System.out.println("\n\nTraining set 1: ");
+        cubicWeights = quadraticLearning(train1, cubicWeights, training_const, k);
+        System.out.println("\n\nTraining set 2: ");
+        cubicWeights = quadraticLearning(train2, cubicWeights, training_const, k);
+        System.out.println("\n\nTraining set 3: ");
+        cubicWeights = cubicLearning(train3, cubicWeights, training_const, k);
+        System.out.println("\n\nTest: ");
+        cubicTesting(test, cubicWeights);
 
     }
 
@@ -98,7 +109,7 @@ public class Proj3
             }
             testTotalError += Math.pow((test.get(i).getRate() - testOut), 2);
         }
-        System.out.println("Incorrect: " + incorrect + "Total Error: " + testTotalError + " : Mean Square Error = " + Math.sqrt(testTotalError)/ test.size());
+        System.out.println("Incorrect: " + incorrect + "  Total Error: " + testTotalError + "  Mean Square Error = " + Math.sqrt(testTotalError)/ test.size());
     }
 
     public static double[] quadraticLearning(ArrayList<Stats> train, double[] weight, double learning_const, int k) {
@@ -106,7 +117,7 @@ public class Proj3
         double weightMultiplier = 1;
         double totalError = 0;
         for (int i = 0; i < train.size(); i++) {
-            out = train.get(i).getHour() * weight[0] + weight[1];
+            out = train.get(i).getHour() * weight[0]+ Math.pow(train.get(i).getHour(), 2) * weight[1] + weight[2];
             weightMultiplier = learning_const * (train.get(i).getRate() - out);
             weight[0] +=  weightMultiplier * train.get(i).getRate();
             totalError += Math.pow(train.get(i).getRate() - out , 2);
@@ -121,7 +132,7 @@ public class Proj3
         double incorrect = 0;
         double testTotalError = 0;
         for (int i = 0; i < test.size(); i++) {
-            testOut = test.get(i).getHour() * weight[0] + weight[1];
+            testOut = test.get(i).getHour() * weight[0]+ Math.pow(test.get(i).getHour(), 2) * weight[1] + weight[2];
             results.add(new Stats(test.get(i).getHour(), testOut));
 
             System.out.println("Expected: " + test.get(i).getRate()+ " Predicted: " + testOut);
@@ -130,8 +141,41 @@ public class Proj3
             }
             testTotalError += Math.pow((test.get(i).getRate() - testOut), 2);
         }
-        System.out.println("Incorrect: " + incorrect + "Total Error: " + testTotalError + " : Mean Square Error = " + Math.sqrt(testTotalError)/ test.size());
+        System.out.println("Incorrect: " + incorrect + "  Total Error: " + testTotalError + "  Mean Square Error = " + Math.sqrt(testTotalError)/ test.size());
     }
+
+    public static double[] cubicLearning(ArrayList<Stats> train, double[] weight, double learning_const, int k) {
+        double out;
+        double weightMultiplier = 1;
+        double totalError = 0;
+        for (int i = 0; i < train.size(); i++) {
+            out = train.get(i).getHour() * weight[0] + Math.pow(train.get(i).getHour(), 2) * weight[1] + Math.pow(train.get(i).getHour(),3) * weight[2] + weight[3];
+            weightMultiplier = learning_const * (train.get(i).getRate() - out);
+            weight[0] +=  weightMultiplier * train.get(i).getRate();
+            totalError += Math.pow(train.get(i).getRate() - out , 2);
+        }
+        System.out.println("Total Error: " + totalError + " : RootMeanError = " + Math.sqrt(totalError) / train.size());
+        return weight;
+    }
+
+    public static void cubicTesting(ArrayList<Stats> test, double[] weight) {
+        double testOut;
+        ArrayList<Stats> results = new ArrayList<>();
+        double incorrect = 0;
+        double testTotalError = 0;
+        for (int i = 0; i < test.size(); i++) {
+            testOut = test.get(i).getHour() * weight[0]+ Math.pow(test.get(i).getHour(), 2) * weight[1] +Math.pow(test.get(i).getHour(),3) * weight[2] + weight[3];
+            results.add(new Stats(test.get(i).getHour(), testOut));
+
+            System.out.println("Expected: " + test.get(i).getRate()+ " Predicted: " + testOut);
+            if (test.get(i).getRate() != testOut){
+                incorrect++;
+            }
+            testTotalError += Math.pow((test.get(i).getRate() - testOut), 2);
+        }
+        System.out.println("Incorrect: " + incorrect + "  Total Error: " + testTotalError + "  Mean Square Error = " + Math.sqrt(testTotalError)/ test.size());
+    }
+
 
 }
 
