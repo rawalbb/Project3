@@ -23,14 +23,32 @@ public class Proj3
         weights[2] = 3;
         double training_const = 0.005;
         int k = 1;
+
+        System.out.println("linear architecture------------------");
+        double[] linearWeights = weights;
         System.out.println("\n\nTraining set 1: ");
-        weights = linearLearning(train1, weights, training_const, k);
+        linearWeights = linearLearning(train1, linearWeights, training_const, k);
         System.out.println("\n\nTraining set 2: ");
-        weights = linearLearning(train2, weights, training_const, k);
+        linearWeights = linearLearning(train2, linearWeights, training_const, k);
         System.out.println("\n\nTraining set 3: ");
-        weights = linearLearning(train3, weights, training_const, k);
+        linearWeights = linearLearning(train3, linearWeights, training_const, k);
         System.out.println("\n\nTest: ");
-        linearTesting(test, weights);
+        linearTesting(test, linearWeights);
+
+        System.out.println("quadratic architecture------------------");
+        double[] quadraticWeights = weights;
+        System.out.println("\n\nTraining set 1: ");
+        quadraticWeights = quadraticLearning(train1, quadraticWeights, training_const, k);
+        System.out.println("\n\nTraining set 2: ");
+        quadraticWeights = quadraticLearning(train2, quadraticWeights, training_const, k);
+        System.out.println("\n\nTraining set 3: ");
+        quadraticWeights = quadraticLearning(train3, quadraticWeights, training_const, k);
+        System.out.println("\n\nTest: ");
+        quadraticTesting(test, quadraticWeights);
+
+        System.out.println("cubic architecture------------------");
+
+
     }
 
     private static ArrayList<Stats> readData(String fileName) throws IOException {
@@ -83,9 +101,38 @@ public class Proj3
         System.out.println("Incorrect: " + incorrect + "Total Error: " + testTotalError + " : Mean Square Error = " + Math.sqrt(testTotalError)/ test.size());
     }
 
-    public static void quadraticLearning(ArrayList<Stats> train, double[] weight, double learning_const, int k) {
-
+    public static double[] quadraticLearning(ArrayList<Stats> train, double[] weight, double learning_const, int k) {
+        double out;
+        double weightMultiplier = 1;
+        double totalError = 0;
+        for (int i = 0; i < train.size(); i++) {
+            out = train.get(i).getHour() * weight[0] + weight[1];
+            weightMultiplier = learning_const * (train.get(i).getRate() - out);
+            weight[0] +=  weightMultiplier * train.get(i).getRate();
+            totalError += Math.pow(train.get(i).getRate() - out , 2);
+        }
+        System.out.println("Total Error: " + totalError + " : RootMeanError = " + Math.sqrt(totalError) / train.size());
+        return weight;
     }
+
+    public static void quadraticTesting(ArrayList<Stats> test, double[] weight) {
+        double testOut;
+        ArrayList<Stats> results = new ArrayList<>();
+        double incorrect = 0;
+        double testTotalError = 0;
+        for (int i = 0; i < test.size(); i++) {
+            testOut = test.get(i).getHour() * weight[0] + weight[1];
+            results.add(new Stats(test.get(i).getHour(), testOut));
+
+            System.out.println("Expected: " + test.get(i).getRate()+ " Predicted: " + testOut);
+            if (test.get(i).getRate() != testOut){
+                incorrect++;
+            }
+            testTotalError += Math.pow((test.get(i).getRate() - testOut), 2);
+        }
+        System.out.println("Incorrect: " + incorrect + "Total Error: " + testTotalError + " : Mean Square Error = " + Math.sqrt(testTotalError)/ test.size());
+    }
+
 }
 
 class Stats {
