@@ -12,12 +12,18 @@ public class Proj3
         ArrayList<Stats> train2 = new ArrayList<>();
         ArrayList<Stats> train3 = new ArrayList<>();
         ArrayList<Stats> test = new ArrayList<>();
-        final double alpha = 0.3;
 
         train1 = readData("train_data_1.txt");
         train2 = readData("train_data_2.txt");
         train3 = readData("train_data_3.txt");
         test = readData("test_data_4.txt");
+        double[] weights = new double[3];
+        weights[0] = 1;
+        weights[1] = 2;
+        weights[2] = 3;
+        double training_const = 0.005;
+        int k = 1;
+        learn(train1, weights, training_const, k);
     }
 
     private static ArrayList<Stats> readData(String fileName) throws IOException {
@@ -35,21 +41,21 @@ public class Proj3
         return allDataPoints;
     }
 
-    private static void linearActivationFunction(ArrayList<Stats> trainingData, double learning) {
-        double weightMultiplier;
-        double[] weights = {1, -1};
+    //while X iterations
+    public static int learn(ArrayList<Stats> train, double[] weight, double learning_const, int k )
+    {
+        //call total error method, if epsilon > total error, break
+        //new weights = calc new waights, weights = new weights
+        double net;
         double out;
-
-         for (int i = 0; i < (trainingData.size()); i++) {
-
-             out = trainingData.get(i).getHour()* weights[0] + weights[1];
-
-             weightMultiplier = out;
-             weights[0] +=  weightMultiplier * trainingData.get(i).getHour();
-             weights[1] +=  weightMultiplier;
-         }
-
+        for (int i = 0; i<train.size(); i++)
+        {
+            net = train.get(i).getHour() * weight[0] + weight[1];
+            out = net;
+        }
+        return 0;
     }
+
 
 }
 
