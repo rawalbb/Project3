@@ -17,6 +17,13 @@ public class Proj3
         train2 = readData("train_data_2.txt");
         train3 = readData("train_data_3.txt");
         test = readData("test_data_4.txt");
+        double[] weights = new double[3];
+        weights[0] = 1;
+        weights[1] = 2;
+        weights[2] = 3;
+        double training_const = 0.005;
+        int k = 1;
+        learn(train1, weights, training_const, k);
     }
 
     private static ArrayList<Stats> readData(String fileName) throws IOException {
@@ -34,6 +41,22 @@ public class Proj3
         return allDataPoints;
     }
 
+    //while X iterations
+    public static int learn(ArrayList<Stats> train, double[] weight, double learning_const, int k )
+    {
+        //call total error method, if epsilon > total error, break
+        //new weights = calc new waights, weights = new weights
+        double net;
+        double out;
+        for (int i = 0; i<train.size(); i++)
+        {
+            net = train.get(i).getHour() * weight[0] + weight[1];
+            out = net;
+        }
+        return 0;
+    }
+
+    
 }
 
 class Stats{
@@ -55,3 +78,5 @@ class Stats{
     }
 
 }
+
+
