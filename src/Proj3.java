@@ -12,6 +12,7 @@ public class Proj3
         ArrayList<Stats> train2 = new ArrayList<>();
         ArrayList<Stats> train3 = new ArrayList<>();
         ArrayList<Stats> test = new ArrayList<>();
+        final double alpha = 0.3;
 
         train1 = readData("train_data_1.txt");
         train2 = readData("train_data_2.txt");
@@ -32,6 +33,22 @@ public class Proj3
         scanFile.close();
 
         return allDataPoints;
+    }
+
+    private static void linearActivationFunction(ArrayList<Stats> trainingData, double learning) {
+        double weightMultiplier;
+        double[] weights = {1, -1};
+        double out;
+
+         for (int i = 0; i < (trainingData.size()); i++) {
+
+             out = trainingData.get(i).getHour()* weights[0] + weights[1];
+
+             weightMultiplier = out;
+             weights[0] +=  weightMultiplier * trainingData.get(i).getHour();
+             weights[1] +=  weightMultiplier;
+         }
+
     }
 
 }
