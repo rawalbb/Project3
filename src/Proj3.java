@@ -17,32 +17,27 @@ public class Proj3
         train2 = readData("train_data_2.txt");
         train3 = readData("train_data_3.txt");
         test = readData("test_data_4.txt");
-        double[] weights = new double[3];
-        weights[0] = 1;
-        weights[1] = 2;
-        weights[2] = 3;
         double training_const = 0.005;
-        int k = 1;
 
         System.out.println("\n\nlinear architecture------------------");
-        double[] linearWeights = weights;
+        double[] linearWeights = {1,2,3};
         System.out.println("\n\nTraining set 1: ");
-        linearWeights = linearLearning(train1, linearWeights, training_const, k);
+        linearWeights = linearLearning(train1, linearWeights, training_const);
         System.out.println("\n\nTraining set 2: ");
-        linearWeights = linearLearning(train2, linearWeights, training_const, k);
+        linearWeights = linearLearning(train2, linearWeights, training_const);
         System.out.println("\n\nTraining set 3: ");
-        linearWeights = linearLearning(train3, linearWeights, training_const, k);
+        linearWeights = linearLearning(train3, linearWeights, training_const);
         System.out.println("\n\nTest: ");
         linearTesting(test, linearWeights);
 
         System.out.println("\n\nquadratic architecture------------------");
-        double[] quadraticWeights = weights;
+        double[] quadraticWeights = {1,2,3};
         System.out.println("\n\nTraining set 1: ");
-        quadraticWeights = quadraticLearning(train1, quadraticWeights, training_const, k);
+        quadraticWeights = quadraticLearning(train1, quadraticWeights, training_const);
         System.out.println("\n\nTraining set 2: ");
-        quadraticWeights = quadraticLearning(train2, quadraticWeights, training_const, k);
+        quadraticWeights = quadraticLearning(train2, quadraticWeights, training_const);
         System.out.println("\n\nTraining set 3: ");
-        quadraticWeights = quadraticLearning(train3, quadraticWeights, training_const, k);
+        quadraticWeights = quadraticLearning(train3, quadraticWeights, training_const);
         System.out.println("\n\nTest: ");
         quadraticTesting(test, quadraticWeights);
 
@@ -67,7 +62,7 @@ public class Proj3
     }
 
     //while X iterations
-    public static double[] linearLearning(ArrayList<Stats> train, double[] weight, double learning_const, int k ) {
+    public static double[] linearLearning(ArrayList<Stats> train, double[] weight, double learning_const) {
         //call total error method, if epsilon > total error, break
         //new weights = calc new weights, weights = new weights
         double out;
@@ -102,7 +97,7 @@ public class Proj3
         System.out.println("Incorrect: " + incorrect + "Total Error: " + testTotalError + " : Mean Square Error = " + Math.sqrt(testTotalError)/ test.size());
     }
 
-    public static double[] quadraticLearning(ArrayList<Stats> train, double[] weight, double learning_const, int k) {
+    public static double[] quadraticLearning(ArrayList<Stats> train, double[] weight, double learning_const) {
         double out;
         double weightMultiplier = 1;
         double totalError = 0;
