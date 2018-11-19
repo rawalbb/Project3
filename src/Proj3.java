@@ -2,7 +2,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 public class Proj3
@@ -18,34 +17,27 @@ public class Proj3
         train2 = readData("train_data_2.txt");
         train3 = readData("train_data_3.txt");
         test = readData("test_data_4.txt");
-        double[] weights = new double[4];
-        weights[0] = 1;
-        weights[1] = 2;
-        weights[2] = 3;
-        weights[3] = 4;
-
         double training_const = 0.005;
-        int k = 1;
 
-        System.out.println("linear architecture------------------");
-        double[] linearWeights = weights;
+        System.out.println("\n\nlinear architecture------------------");
+        double[] linearWeights = {1,2,3};
         System.out.println("\n\nTraining set 1: ");
-        linearWeights = linearLearning(train1, linearWeights, training_const, k);
+        linearWeights = linearLearning(train1, linearWeights, training_const);
         System.out.println("\n\nTraining set 2: ");
-        linearWeights = linearLearning(train2, linearWeights, training_const, k);
+        linearWeights = linearLearning(train2, linearWeights, training_const);
         System.out.println("\n\nTraining set 3: ");
-        linearWeights = linearLearning(train3, linearWeights, training_const, k);
+        linearWeights = linearLearning(train3, linearWeights, training_const);
         System.out.println("\n\nTest: ");
         linearTesting(test, linearWeights);
 
-        System.out.println("quadratic architecture------------------");
-        double[] quadraticWeights = weights;
+        System.out.println("\n\nquadratic architecture------------------");
+        double[] quadraticWeights = {1,2,3};
         System.out.println("\n\nTraining set 1: ");
-        quadraticWeights = quadraticLearning(train1, quadraticWeights, training_const, k);
+        quadraticWeights = quadraticLearning(train1, quadraticWeights, training_const);
         System.out.println("\n\nTraining set 2: ");
-        quadraticWeights = quadraticLearning(train2, quadraticWeights, training_const, k);
+        quadraticWeights = quadraticLearning(train2, quadraticWeights, training_const);
         System.out.println("\n\nTraining set 3: ");
-        quadraticWeights = quadraticLearning(train3, quadraticWeights, training_const, k);
+        quadraticWeights = quadraticLearning(train3, quadraticWeights, training_const);
         System.out.println("\n\nTest: ");
         quadraticTesting(test, quadraticWeights);
 
@@ -78,7 +70,7 @@ public class Proj3
     }
 
     //while X iterations
-    public static double[] linearLearning(ArrayList<Stats> train, double[] weight, double learning_const, int k ) {
+    public static double[] linearLearning(ArrayList<Stats> train, double[] weight, double learning_const) {
         //call total error method, if epsilon > total error, break
         //new weights = calc new weights, weights = new weights
         double out;
@@ -87,7 +79,8 @@ public class Proj3
         for (int i = 0; i < train.size(); i++) {
             out = train.get(i).getHour() * weight[0] + weight[1];
             weightMultiplier = learning_const * (train.get(i).getRate() - out);
-            weight[0] +=  weightMultiplier * train.get(i).getRate();
+            weight[0] +=  weightMultiplier * train.get(i).getHour();
+            weight[1] += weightMultiplier;
             totalError += Math.pow(train.get(i).getRate() - out , 2);
         }
         System.out.println("Total Error: " + totalError + " : RootMeanError = " + Math.sqrt(totalError) / train.size());
@@ -112,14 +105,16 @@ public class Proj3
         System.out.println("Incorrect: " + incorrect + "  Total Error: " + testTotalError + "  Mean Square Error = " + Math.sqrt(testTotalError)/ test.size());
     }
 
-    public static double[] quadraticLearning(ArrayList<Stats> train, double[] weight, double learning_const, int k) {
+    public static double[] quadraticLearning(ArrayList<Stats> train, double[] weight, double learning_const) {
         double out;
         double weightMultiplier = 1;
         double totalError = 0;
         for (int i = 0; i < train.size(); i++) {
-            out = train.get(i).getHour() * weight[0]+ Math.pow(train.get(i).getHour(), 2) * weight[1] + weight[2];
+            out = (Math.pow(train.get(i).getHour(),2) * weight[0]) + (train.get(i).getHour() * weight[1]) + weight[2];
             weightMultiplier = learning_const * (train.get(i).getRate() - out);
-            weight[0] +=  weightMultiplier * train.get(i).getRate();
+            weight[0] += weightMultiplier * Math.pow(train.get(i).getHour(), 2);
+            weight[1] += weightMultiplier * train.get(i).getHour();
+            weight[2] += weightMultiplier;
             totalError += Math.pow(train.get(i).getRate() - out , 2);
         }
         System.out.println("Total Error: " + totalError + " : RootMeanError = " + Math.sqrt(totalError) / train.size());
