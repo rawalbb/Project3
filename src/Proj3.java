@@ -24,11 +24,13 @@ public class Proj3
         double training_const = 0.005;
         int k = 1;
         System.out.println("\n\nTraining set 1: ");
-        learn(train1, weights, training_const, k);
+        weights = learn(train1, weights, training_const, k);
         System.out.println("\n\nTraining set 2: ");
-        learn(train2, weights, training_const, k);
+        weights = learn(train2, weights, training_const, k);
         System.out.println("\n\nTraining set 3: ");
-        learn(train3, weights, training_const, k);
+        weights = learn(train3, weights, training_const, k);
+        System.out.println("\n\nTest: ");
+        test(test, weights);
     }
 
     private static ArrayList<Stats> readData(String fileName) throws IOException {
@@ -47,7 +49,7 @@ public class Proj3
     }
 
     //while X iterations
-    public static void learn(ArrayList<Stats> train, double[] weight, double learning_const, int k )
+    public static double[] learn(ArrayList<Stats> train, double[] weight, double learning_const, int k )
     {
         //call total error method, if epsilon > total error, break
         //new weights = calc new weights, weights = new weights
@@ -60,7 +62,26 @@ public class Proj3
             weight[0] +=  weightMultiplier * train.get(i).getRate();
             totalError += Math.pow(train.get(i).getRate() - out , 2);
         }
-        System.out.println("Total Error: " + totalError);
+        System.out.println("Total Error: " + totalError + " : RootMeanError = " + Math.sqrt(totalError / train.size()));
+        return weight;
+    }
+
+    public static void test(ArrayList<Stats> test, double[] weight) {
+        double testOut;
+        ArrayList<Stats> results = new ArrayList<>();
+        double incorrect = 0;
+        double testTotalError = 0;
+        for (int i = 0; i < test.size(); i++) {
+            testOut = test.get(i).getHour() * weight[0] + weight[1];
+            results.add(new Stats(test.get(i).getHour(), testOut));
+
+            System.out.println("Expected: " + test.get(i).getRate()+ " Predicted: " + testOut);
+            if (test.get(i).getRate() != testOut){
+                incorrect++;
+            }
+            testTotalError += Math.pow((test.get(i).getRate() - testOut), 2);
+        }
+        System.out.println("Incorrect: " + incorrect + "Total Error: " + testTotalError + " : RootMeanError = " + Math.sqrt(testTotalError / test.size()));
     }
 }
 
