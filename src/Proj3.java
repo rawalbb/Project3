@@ -24,13 +24,13 @@ public class Proj3
         double training_const = 0.005;
         int k = 1;
         System.out.println("\n\nTraining set 1: ");
-        weights = learn(train1, weights, training_const, k);
+        weights = linearLearning(train1, weights, training_const, k);
         System.out.println("\n\nTraining set 2: ");
-        weights = learn(train2, weights, training_const, k);
+        weights = linearLearning(train2, weights, training_const, k);
         System.out.println("\n\nTraining set 3: ");
-        weights = learn(train3, weights, training_const, k);
+        weights = linearLearning(train3, weights, training_const, k);
         System.out.println("\n\nTest: ");
-        test(test, weights);
+        linearTesting(test, weights);
     }
 
     private static ArrayList<Stats> readData(String fileName) throws IOException {
@@ -49,8 +49,7 @@ public class Proj3
     }
 
     //while X iterations
-    public static double[] learn(ArrayList<Stats> train, double[] weight, double learning_const, int k )
-    {
+    public static double[] linearLearning(ArrayList<Stats> train, double[] weight, double learning_const, int k ) {
         //call total error method, if epsilon > total error, break
         //new weights = calc new weights, weights = new weights
         double out;
@@ -62,11 +61,11 @@ public class Proj3
             weight[0] +=  weightMultiplier * train.get(i).getRate();
             totalError += Math.pow(train.get(i).getRate() - out , 2);
         }
-        System.out.println("Total Error: " + totalError + " : RootMeanError = " + Math.sqrt(totalError / train.size()));
+        System.out.println("Total Error: " + totalError + " : RootMeanError = " + Math.sqrt(totalError) / train.size());
         return weight;
     }
 
-    public static void test(ArrayList<Stats> test, double[] weight) {
+    public static void linearTesting(ArrayList<Stats> test, double[] weight) {
         double testOut;
         ArrayList<Stats> results = new ArrayList<>();
         double incorrect = 0;
@@ -81,11 +80,15 @@ public class Proj3
             }
             testTotalError += Math.pow((test.get(i).getRate() - testOut), 2);
         }
-        System.out.println("Incorrect: " + incorrect + "Total Error: " + testTotalError + " : RootMeanError = " + Math.sqrt(testTotalError / test.size()));
+        System.out.println("Incorrect: " + incorrect + "Total Error: " + testTotalError + " : Mean Square Error = " + Math.sqrt(testTotalError)/ test.size());
+    }
+
+    public static void quadraticLearning(ArrayList<Stats> train, double[] weight, double learning_const, int k) {
+
     }
 }
 
-class Stats{
+class Stats {
 
     double hour;
     double rate;
