@@ -117,7 +117,7 @@ public class Proj3 {
         double weightMultiplier = 1;
         double totalError = 0;
         int count  = 0;
-        while(count < 201) {
+        while(count <= 1000000) {
             for (int i = 0; i < train.size(); i++) {
                 out = train.get(i).getHour() * weight[0] + weight[1];
                 weightMultiplier = learning_const * (train.get(i).getRate() - out);
@@ -153,10 +153,6 @@ public class Proj3 {
         double totalError = 0;
         int count = 0;
 
-        for(double w : weight) {
-            System.out.println(w);
-        }
-
         while(count <= 1000000) {
             for (int i = 0; i < train.size(); i++) {
                 out = (Math.pow(train.get(i).getHour(), 2) * weight[0]) + (train.get(i).getHour() * weight[1]) + weight[2];
@@ -176,17 +172,15 @@ public class Proj3 {
         double testOut;
         ArrayList<Stats> results = new ArrayList<>();
         double testTotalError = 0;
-        for(double w : weight) {
-            System.out.println(w);
+
+        for (int i = 0; i < test.size(); i++) {
+            testOut = (Math.pow(test.get(i).getHour(), 2) * weight[0]) + (test.get(i).getHour() * weight[1]) + weight[2];
+            results.add(new Stats(test.get(i).getHour(), testOut));
+
+            System.out.println("Expected: " + test.get(i).getRate() + " Predicted: " + testOut);
+
+            testTotalError += Math.pow((test.get(i).getRate() - testOut), 2);
         }
-            for (int i = 0; i < test.size(); i++) {
-                testOut = (Math.pow(test.get(i).getHour(), 2) * weight[0]) + (test.get(i).getHour() * weight[1]) + weight[2];
-                results.add(new Stats(test.get(i).getHour(), testOut));
-
-                System.out.println("Expected: " + test.get(i).getRate() + " Predicted: " + testOut);
-
-                testTotalError += Math.pow((test.get(i).getRate() - testOut), 2);
-            }
         System.out.println("Mean Square Error = " + Math.sqrt(testTotalError)/ test.size());
     }
 
@@ -195,7 +189,7 @@ public class Proj3 {
         double weightMultiplier = 1;
         double totalError = 0;
         int count = 0;
-        while(count < 1000001) {
+        while(count <= 1000000) {
             for (int i = 0; i < train.size(); i++) {
                 out = (Math.pow(train.get(i).getHour(), 3) * weight[0]) + (Math.pow(train.get(i).getHour(), 2) * weight[1]) + (train.get(i).getHour() * weight[2]) + weight[3];
                 weightMultiplier = learning_const * (train.get(i).getRate() - out);
