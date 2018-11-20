@@ -6,10 +6,10 @@ import java.util.Scanner;
 public class Proj3 {
 
     public static void main(String[] args) throws IOException {
-        ArrayList<Stats> train1 = new ArrayList<>();
-        ArrayList<Stats> train2 = new ArrayList<>();
-        ArrayList<Stats> train3 = new ArrayList<>();
-        ArrayList<Stats> test = new ArrayList<>();
+        ArrayList<Stats> train1;
+        ArrayList<Stats> train2;
+        ArrayList<Stats> train3;
+        ArrayList<Stats> test;
 
         train1 = normalizeData(readData("train_data_1.txt"));
         train2 = normalizeData(readData("train_data_2.txt"));
@@ -68,7 +68,7 @@ public class Proj3 {
     }
 
     private static ArrayList<Stats> normalizeData(ArrayList<Stats> toNormalize) {
-        ArrayList<Stats> normalized = new ArrayList<Stats>();
+        ArrayList<Stats> normalized = new ArrayList<>();
         double minHours = 0;
         double maxHours = 0;
         double minRate = 0;
@@ -245,5 +245,4 @@ class Stats {
     double getRate() {
         return this.rate;
     }
-
 }
