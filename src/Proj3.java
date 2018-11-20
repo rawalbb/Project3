@@ -17,6 +17,7 @@ public class Proj3 {
         train2 = normalizeData(readData("train_data_2.txt"));
         train3 = normalizeData(readData("train_data_3.txt"));
         test = normalizeData(readData("test_data_4.txt"));
+
         double training_const = 0.000001;
 
         System.out.println("\n\nlinear architecture------------------");
@@ -124,10 +125,13 @@ public class Proj3 {
                 weight[0] += weightMultiplier * train.get(i).getHour();
                 weight[1] += weightMultiplier;
                 totalError += Math.pow(train.get(i).getRate() - out, 2);
+                if(count == 1000000) {
+                    System.out.println(out);
+                }
             }
             count++;
         }
-        System.out.println("Mean Square Error = " + Math.sqrt(totalError) / train.size());
+        System.out.println("Mean Square Error = " + Math.sqrt(totalError) / (train.size() * 1000000));
         return weight;
     }
 
@@ -140,7 +144,7 @@ public class Proj3 {
             testOut = test.get(i).getHour() * weight[0] + weight[1];
             results.add(new Stats(test.get(i).getHour(), testOut));
 
-            System.out.println("Expected: " + test.get(i).getRate()+ " Predicted: " + testOut);
+             System.out.println("Expected: " + test.get(i).getRate()+ " Predicted: " + testOut);
 
             testTotalError += Math.pow((test.get(i).getRate() - testOut), 2);
         }
@@ -161,10 +165,13 @@ public class Proj3 {
                 weight[1] += weightMultiplier * train.get(i).getHour();
                 weight[2] += weightMultiplier;
                 totalError += Math.pow(train.get(i).getRate() - out, 2);
+                if(count == 1000000) {
+                    System.out.println(out);
+                }
             }
             count++;
         }
-        System.out.println("Mean Square Error = " + Math.sqrt(totalError) / train.size());
+        System.out.println("Mean Square Error = " + Math.sqrt(totalError) / (train.size() * 1000000));
         return weight;
     }
 
@@ -181,7 +188,7 @@ public class Proj3 {
 
             testTotalError += Math.pow((test.get(i).getRate() - testOut), 2);
         }
-        System.out.println("Mean Square Error = " + Math.sqrt(testTotalError)/ test.size());
+        System.out.println("Mean Square Error = " + Math.sqrt(testTotalError) / test.size());
     }
 
     public static double[] cubicLearning(ArrayList<Stats> train, double[] weight, double learning_const) {
@@ -198,10 +205,13 @@ public class Proj3 {
                 weight[2] += weightMultiplier * train.get(i).getHour();
                 weight[3] += weightMultiplier;
                 totalError += Math.pow(train.get(i).getRate() - out, 2);
+                if(count == 1000000) {
+                    System.out.println(out);
+                }
             }
             count++;
         }
-        System.out.println("Mean Square Error = " + Math.sqrt(totalError) / train.size());
+        System.out.println("Mean Square Error = " + Math.sqrt(totalError) / (train.size() * 1000000));
         return weight;
     }
 
